@@ -1,0 +1,50 @@
+#
+# COPYRIGHT Ericsson 2021
+#
+#
+#
+# The copyright to the computer program(s) herein is the property of
+#
+# Ericsson Inc. The programs may be used and/or copied only with written
+#
+# permission from Ericsson Inc. or in accordance with the terms and
+#
+# conditions stipulated in the agreement/contract under which the
+#
+# program(s) have been supplied.
+#
+
+modelVersion: 2.0
+
+# See image catalog: https://confluence.lmera.ericsson.se/display/ACD/ADP+CICD+Docker+Image+Catalog
+docker-images:
+  - adp-helm-dr-check: armdocker.rnd.ericsson.se/proj-adp-cicd-drop/common-library-adp-helm-dr-check:${env.HELM_DR_CHECK_TAG}
+
+import:
+  common: ../common-properties.yaml
+
+env:
+  - HELM_DR_CHECK_TAG (default=latest)
+
+# Rules to execute
+# rules:
+#   lint:
+#   - task: helm-chart-check
+#     docker-image: adp-helm-dr-check
+#     cmd: helm-dr-check --helm-chart charts/${common.helm-chart-name} ${enabled-helm-design-rules} ${exempt-helm-design-rules} --helm-v3 --output .bob/
+
+
+#Rules to execute
+rules:
+  success:
+  - task: custom-post-success
+    # docker-image: adp-helm-dr-check
+    cmd:
+    # helm-dr-check --helm-chart charts/${common.helm-chart-name} ${enabled-helm-design-rules} ${exempt-helm-design-rules} --helm-v3 --output .bob/
+      - echo "custom success marker called - yay!!"
+  failure:
+  - task: custom-post-failure
+    # docker-image: adp-helm-dr-check
+    cmd:
+      # helm-dr-check --helm-chart charts/${common.helm-chart-name} ${enabled-helm-design-rules} ${exempt-helm-design-rules} --helm-v3 --output .bob/
+      - echo "custom failure marker called because stage failed"
